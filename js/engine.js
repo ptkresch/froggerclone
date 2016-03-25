@@ -28,6 +28,9 @@ var Engine = (function(global) {
     canvas.width = 505;
     canvas.height = 606;
     doc.body.appendChild(canvas);
+    canvas.setAttribute("id", "canvas");
+    movePlayer = false;
+
 
     /* This function serves as the kickoff point for the game loop itself
      * and handles properly calling the update and render methods.
@@ -64,7 +67,6 @@ var Engine = (function(global) {
      * game loop.
      */
     function init() {
-        reset();
         lastTime = Date.now();
         main();
     }
@@ -80,6 +82,7 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
+        gameTime += dt;
         // checkCollisions();
     }
 
@@ -94,7 +97,16 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
+
         player.update();
+
+        allHearts.forEach(function(heart){
+            heart.update();
+        })
+
+        allStars.forEach(function(star){
+            star.update();
+        });
     }
 
     /* This function initially draws the "game level", it will then call
@@ -133,6 +145,19 @@ var Engine = (function(global) {
                  * we're using them over and over.
                  */
                 ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
+                ctx.font = "30px Verdana";
+                var gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+                gradient.addColorStop("0", "red");
+                gradient.addColorStop("0.3", "blue");
+                ctx.fillStyle = gradient;
+                ctx.fillText("Time: " + Math.floor(gameTime), 20, 550);
+                gradient.addColorStop("0.8", "blue");
+                gradient.addColorStop("1", "red");
+                ctx.fillText("Score: " + Math.floor(score), 350, 550);
+                if(allHearts.length == 0){
+                    movePlayer = false;
+                    reset();
+                }
             }
         }
 
@@ -147,21 +172,62 @@ var Engine = (function(global) {
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
          */
+        allStars.forEach(function(star) {
+            star.render();
+        });
+
         allEnemies.forEach(function(enemy) {
             enemy.render();
         });
 
         player.render();
+
+        allHearts.forEach(function(heart){
+            heart.render();
+        });
     }
 
     /* This function does nothing but it could have been a good place to
      * handle game reset states - maybe a new game menu or a game over screen
      * those sorts of things. It's only called once by the init() method.
      */
+
     function reset() {
-        // noop
+        $('#game-over').show();
+        document.getElementById("game-over").onclick = function(){
+            $('#game-over').hide();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            allEnemies = [];
+            allStars = [];
+            score = 0;
+            movePlayer = true;
+            allHearts = [new Heart(), new Heart(), new Heart()];
+            allHearts[1].x = 65;
+            allHearts[2].x = 20; 
+            for (var i=0; i < 2; i++){
+                allEnemies.push(new Enemy());
+            }
+            for (var i=0; i < 4; i++){
+                allStars.push(new Star());
+            }
+        }
     }
 
+    function mainMenu() {
+        $('#main').show();
+        $('#game-over').hide();
+    }
+
+    $('.play').click(function(){
+        $('#menu').hide();
+        movePlayer = true;
+        Resources.onReady(init());
+    });
+
+
+   // $('.instructions').click(function(){
+    //    alert("sup");
+    //})
     /* Go ahead and load all of the images we know we're going to need to
      * draw our game level. Then set init as the callback method, so that when
      * all of these images are properly loaded our game will start.
@@ -171,9 +237,11 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
+        'images/Star.png',
+        'images/Heart.png',
         'images/char-boy.png'
     ]);
-    Resources.onReady(init);
+    Resources.onReady(mainMenu);
 
     /* Assign the canvas' context object to the global variable (the window
      * object when run in a browser) so that developers can use it more easily
