@@ -13,7 +13,6 @@
  * the canvas' context (ctx) object globally available to make writing app.js
  * a little simpler to work with.
  */
-
 var Engine = (function(global) {
     /* Predefine the variables we'll be using within this scope,
      * create the canvas element, grab the 2D context for that canvas
@@ -100,11 +99,11 @@ var Engine = (function(global) {
 
         player.update();
 
-        allHearts.forEach(function(heart){
+        allHearts.forEach(function(heart) {
             heart.update();
-        })
+        }); // added semicolon
 
-        allStars.forEach(function(star){
+        allStars.forEach(function(star) {
             star.update();
         });
     }
@@ -120,12 +119,12 @@ var Engine = (function(global) {
          * for that particular row of the game level.
          */
         var rowImages = [
-                'images/water-block.png',   // Top row is water
-                'images/stone-block.png',   // Row 1 of 3 of stone
-                'images/stone-block.png',   // Row 2 of 3 of stone
-                'images/stone-block.png',   // Row 3 of 3 of stone
-                'images/grass-block.png',   // Row 1 of 2 of grass
-                'images/grass-block.png'    // Row 2 of 2 of grass
+                'images/water-block.png', // Top row is water
+                'images/stone-block.png', // Row 1 of 3 of stone
+                'images/stone-block.png', // Row 2 of 3 of stone
+                'images/stone-block.png', // Row 3 of 3 of stone
+                'images/grass-block.png', // Row 1 of 2 of grass
+                'images/grass-block.png' // Row 2 of 2 of grass
             ],
             numRows = 6,
             numCols = 5,
@@ -154,7 +153,7 @@ var Engine = (function(global) {
                 gradient.addColorStop("0.8", "blue");
                 gradient.addColorStop("1", "red");
                 ctx.fillText("Score: " + Math.floor(score), 350, 550);
-                if(allHearts.length == 0){
+                if (allHearts.length == 0) {
                     movePlayer = false;
                     reset();
                 }
@@ -182,7 +181,7 @@ var Engine = (function(global) {
 
         player.render();
 
-        allHearts.forEach(function(heart){
+        allHearts.forEach(function(heart) {
             heart.render();
         });
     }
@@ -194,7 +193,7 @@ var Engine = (function(global) {
 
     function reset() {
         $('#game-over').show();
-        document.getElementById("game-over").onclick = function(){
+        document.getElementById("game-over").onclick = function() {
             $('#game-over').hide();
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             allEnemies = [];
@@ -203,11 +202,11 @@ var Engine = (function(global) {
             movePlayer = true;
             allHearts = [new Heart(), new Heart(), new Heart()];
             allHearts[1].x = 65;
-            allHearts[2].x = 20; 
-            for (var i=0; i < 2; i++){
+            allHearts[2].x = 20;
+            for (var i = 0; i < 2; i++) {
                 allEnemies.push(new Enemy());
             }
-            for (var i=0; i < 4; i++){
+            for (var i = 0; i < 4; i++) {
                 allStars.push(new Star());
             }
         }
@@ -218,14 +217,14 @@ var Engine = (function(global) {
         $('#game-over').hide();
     }
 
-    $('.play').click(function(){
+    $('.play').click(function() {
         $('#menu').hide();
         movePlayer = true;
         Resources.onReady(init());
     });
 
 
-   // $('.instructions').click(function(){
+    // $('.instructions').click(function(){
     //    alert("sup");
     //})
     /* Go ahead and load all of the images we know we're going to need to
