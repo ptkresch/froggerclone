@@ -1,7 +1,5 @@
 #Bug Stampede!
 
-For detailed instructions on how to get started, check out this [guide](https://docs.google.com/document/d/1v01aScPjSWCCWQLIpFqvg3-vXLH2e8_SZQKC8jNO0Dc/pub?embedded=true).
-
 ##Setting Up Bug Stampede
 
 Begin by navigating [here](https://github.com/ptkresch/froggerclone) to find the Github repository for the game. Select the 'Clone or download' button and choose one of the options: Open in Github desktop, Download ZIP file, or copy the git url to the clipboard. The latter utilizes Github through the terminal or command line. 
